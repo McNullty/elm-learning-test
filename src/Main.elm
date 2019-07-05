@@ -1,9 +1,11 @@
 module Main exposing (main)
 
 import Bootstrap.Button as Button
+import Bootstrap.CDN as CDN
 import Bootstrap.Form as Form
 import Bootstrap.Form.Input as Input
 import Bootstrap.Grid as Grid
+import Bootstrap.Grid.Col as Col
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -29,9 +31,10 @@ initialModel =
 view : User -> Html msg
 view user =
     Grid.container []
-        [ Grid.row []
-            [ Grid.col []
-                [ h1 [] [ text "Sign up" ]
+        [ CDN.stylesheet -- creates an inline style node with the Bootstrap CSS. TODO: Remove before deploying
+        , Grid.row []
+            [ Grid.col [ Col.md6, Col.offsetMd3 ]
+                [ h1 [ class "text-center" ] [ text "Sign up" ]
                 , Form.form []
                     [ Form.group []
                         [ Form.label [ for "name" ] [ text "Name" ]
