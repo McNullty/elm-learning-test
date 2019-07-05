@@ -2,6 +2,10 @@ module Main exposing (main)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Bootstrap.Grid as Grid
+import Bootstrap.Button as Button
+import Bootstrap.Form as Form
+import Bootstrap.Form.Input as Input
 import Browser
 
 type alias User =
@@ -21,37 +25,27 @@ initialModel =
 
 view : User -> Html msg
 view user =
-    div []
-        [ h1 [] [ text "Sign up" ]
-        , Html.form []
-            [ div []
-                [ text "Name"
-                , input
-                    [ id "name"
-                    , type_ "text"
-                    ]
-                    []
-                ]
-            , div []
-                [ text "Email"
-                , input
-                    [ id "email"
-                    , type_ "email"
-                    ]
-                    []
-                ]
-            , div []
-                [ text "Password"
-                , input
-                    [ id "password"
-                    , type_ "password"
-                    ]
-                    []
-                ]
-            , div []
-                [ button
-                    [ type_ "submit" ]
-                    [ text "Create my account" ]
+    Grid.container []
+        [ Grid.row []
+            [ Grid.col []
+                [h1 [] [ text "Sign up" ]
+                , Form.form []
+                 [ Form.group []
+                     [ Form.label [ for "name" ] [ text "Name" ]
+                     , Input.text [ Input.id "name" ]
+                     , Form.help [] [ text "Your name." ]
+                     ]
+                 , Form.group []
+                     [ Form.label [ for "email" ] [ text "Email" ]
+                     , Input.email [ Input.id "email", Input.attrs [ placeholder "test@example.com" ] ]
+                     , Form.help [] [ text "Your email." ]
+                     ]
+                 , Form.group []
+                     [ Form.label [ for "password" ] [ text "Password" ]
+                     , Input.password [ Input.id "password" ]
+                     ]
+                 ,  Button.button [ Button.primary ] [ text "Create my account" ]
+                 ]
                 ]
             ]
         ]
