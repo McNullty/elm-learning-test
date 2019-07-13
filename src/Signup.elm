@@ -1,8 +1,11 @@
 module Signup exposing (..)
 
 import Bootstrap.Button as Button exposing (button)
+import Bootstrap.CDN as CDN
 import Bootstrap.Form exposing (form, group, label)
 import Bootstrap.Form.Input as Input exposing (email, id, password)
+import Bootstrap.Grid as Grid
+import Bootstrap.Grid.Col as Col
 import Browser
 import Html exposing (Html, div, h1, text)
 import Html.Attributes exposing (class, for)
@@ -29,25 +32,30 @@ update _ _ =
 
 view : User -> Html msg
 view _ =
-    div [ class "container" ]
-        [ h1 [] [ text "Sign up"]
-        , form []
-            [ group []
-                [ label [ for "name"] [ text "Name" ]
-                , Input.text [ id "name" ]
-                ]
-            , group []
-                [ label [ for "email"] [ text "Email" ]
-                , email [ id "email" ]
-                ]
-            , group []
-                [ label [ for "password"] [ text "Password" ]
-                , password [ id "password" ]
-                ]
-            , group []
-                [ button
-                    [ Button.primary ]
-                    [ text "Create my account" ]
+    Grid.container []
+        [ CDN.stylesheet -- css embedded inline. TODO: Remove before deploy
+        , Grid.row [ ]
+            [ Grid.col [ Col.md6, Col.offsetMd3 ]
+                [ h1 [ class "text-center" ] [ text "Sign up"]
+                , form []
+                    [ group []
+                        [ label [ for "name" ] [ text "Name" ]
+                        , Input.text [ id "name" ]
+                        ]
+                    , group []
+                        [ label [ for "email" ] [ text "Email" ]
+                        , email [ id "email" ]
+                        ]
+                    , group []
+                        [ label [ for "password" ] [ text "Password" ]
+                        , password [ id "password" ]
+                        ]
+                    , div [ class "text-center" ]
+                        [ button
+                            [ Button.large, Button.primary ]
+                            [ text "Create my account" ]
+                        ]
+                    ]
                 ]
             ]
         ]
