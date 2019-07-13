@@ -1,14 +1,15 @@
 module EventListener exposing (..)
 
 import Browser exposing (Document)
-import Browser.Events exposing (onKeyPress)
+import Browser.Events exposing (onClick, onKeyPress)
 import Html exposing (div, text)
-import Json.Decode as Decode
+import Json.Decode as Decode exposing (succeed)
 
 type alias  Model = Int
 
 type Msg
     = KeyPressed
+    | MouseClicked
 
 init : flags -> ( Model, Cmd Msg )
 init _ =
@@ -27,6 +28,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update message model =
     case message of
         KeyPressed -> ( model + 1, Cmd.none )
+        MouseClicked -> ( model - 1, Cmd.none )
 
 keyDecoder : Decode.Decoder Msg
 keyDecoder =
@@ -36,9 +38,12 @@ toMsg : String -> Msg
 toMsg _ =
   KeyPressed
 
-subscription : Model -> Sub Msg
-subscription _ =
-    onKeyPress keyDecoder
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.batch
+    [ onKeyPress keyDecoder
+    , onClick (succeed MouseClicked)
+    ]
 
 
 main : Program () Model Msg
@@ -47,5 +52,5 @@ main =
   { init = init
   , view = view
   , update = update
-  , subscriptions = subscription
+  , subscriptions = subscriptions
   }
