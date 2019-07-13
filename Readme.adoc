@@ -1,0 +1,7 @@
+== Developer notes
+
+Installed json-server
+`sudo npm install -g json-server --unsafe-perm=true --allow-root`
+
+Running server:
+`json-server --watch server/old-school.json -p 5019`
