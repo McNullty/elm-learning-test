@@ -2,29 +2,39 @@ module RandomNumber exposing (..)
 
 import Browser exposing (Document)
 import Html exposing (Html, button, div, text)
+import Html.Events exposing (onClick)
 import Platform exposing (Program)
+import Random
 
 type alias Model = Int
 
-init : flags -> ( Model, Cmd msg )
+type Msg
+    = GenerateRandomNumber
+    | NewRandomNumber Int
+
+init : flags -> ( Model, Cmd Msg )
 init _ =
     ( 0, Cmd.none )
 
-view : Model -> Document msg
+view : Model -> Document Msg
 view model =
-    { title = ""
+    { title = "Random generator page"
     , body = [ div []
-                [ button [] [ text "Generate Random Number" ]
+                [ button [ onClick GenerateRandomNumber ] [ text "Generate Random Number" ]
                 , text (String.fromInt model)
                 ]
              ]
     }
 
-update : msg -> Model -> ( Model, Cmd msg )
-update _ _ =
-    ( 0, Cmd.none )
+update : Msg -> Model -> ( Model, Cmd Msg )
+update message model =
+    case message of
+        GenerateRandomNumber ->
+            ( model, Random.generate NewRandomNumber (Random.int 0 100) )
+        NewRandomNumber number ->
+            ( number, Cmd.none )
 
-main : Program () Model msg
+main : Program () Model Msg
 main =
   Browser.document
   { init = init
