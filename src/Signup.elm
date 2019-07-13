@@ -1,4 +1,4 @@
-module Signup exposing (..)
+module Signup exposing (Msg(..), User, init, main, update, view)
 
 import Bootstrap.Button as Button exposing (button, onClick)
 import Bootstrap.CDN as CDN
@@ -19,11 +19,13 @@ type alias User =
     , loggedIn : Bool
     }
 
+
 type Msg
     = SaveName String
     | SaveEmail String
     | SavePassword String
     | Signup
+
 
 init : User
 init =
@@ -33,29 +35,34 @@ init =
     , loggedIn = False
     }
 
+
 update : Msg -> User -> User
 update message user =
     case message of
         SaveName name ->
             { user | name = log "name: " name }
+
         SaveEmail email ->
             { user | email = log "email: " email }
+
         SavePassword password ->
             { user | password = log "password: " password }
+
         Signup ->
             { user | loggedIn = log "logged: " True }
+
 
 view : User -> Html Msg
 view _ =
     Grid.container []
         [ CDN.stylesheet -- css embedded inline. TODO: Remove before deploy
-        , Grid.row [ ]
+        , Grid.row []
             [ Grid.col [ Col.md6, Col.offsetMd3 ]
-                [ h1 [ class "text-center" ] [ text "Sign up"]
+                [ h1 [ class "text-center" ] [ text "Sign up" ]
                 , form []
                     [ group []
                         [ label [ for "name" ] [ text "Name" ]
-                        , Input.text [ id "name", onInput SaveName]
+                        , Input.text [ id "name", onInput SaveName ]
                         ]
                     , group []
                         [ label [ for "email" ] [ text "Email" ]
@@ -75,6 +82,7 @@ view _ =
             ]
         ]
 
+
 main : Program () User Msg
 main =
-  Browser.sandbox { init = init, update = update, view = view }
+    Browser.sandbox { init = init, update = update, view = view }
