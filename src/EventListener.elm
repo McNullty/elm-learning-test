@@ -3,7 +3,7 @@ module EventListener exposing (..)
 import Browser exposing (Document)
 import Browser.Events exposing (onClick, onKeyPress)
 import Html exposing (div, text)
-import Json.Decode as Decode exposing (succeed)
+import Json.Decode exposing (succeed)
 
 type alias  Model = Int
 
@@ -30,18 +30,10 @@ update message model =
         KeyPressed -> ( model + 1, Cmd.none )
         MouseClicked -> ( model - 1, Cmd.none )
 
-keyDecoder : Decode.Decoder Msg
-keyDecoder =
-  Decode.map toMsg (Decode.field "key" Decode.string)
-
-toMsg : String -> Msg
-toMsg _ =
-  KeyPressed
-
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
-    [ onKeyPress keyDecoder
+    [ onKeyPress (succeed KeyPressed)
     , onClick (succeed MouseClicked)
     ]
 
