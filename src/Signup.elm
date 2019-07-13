@@ -1,8 +1,12 @@
 module Signup exposing (..)
 
+import Bootstrap.Button as Button exposing (button)
+import Bootstrap.Form exposing (form, group, label)
+import Bootstrap.Form.Input as Input exposing (email, id, password)
 import Browser
-import Html exposing (Html, button, div, form, h1, input, text)
-import Html.Attributes exposing (id, type_)
+import Html exposing (Html, div, h1, text)
+import Html.Attributes exposing (class, for)
+
 
 type alias User =
     { name : String
@@ -25,36 +29,24 @@ update _ _ =
 
 view : User -> Html msg
 view _ =
-    div []
+    div [ class "container" ]
         [ h1 [] [ text "Sign up"]
         , form []
-            [ div []
-                [ text "Name"
-                , input
-                    [ id "name"
-                    , type_ "text"
-                    ]
-                    []
+            [ group []
+                [ label [ for "name"] [ text "Name" ]
+                , Input.text [ id "name" ]
                 ]
-            , div []
-                [ text "Email"
-                , input
-                    [ id "email"
-                    , type_ "email"
-                    ]
-                    []
+            , group []
+                [ label [ for "email"] [ text "Email" ]
+                , email [ id "email" ]
                 ]
-            , div []
-                [ text "Password"
-                , input
-                    [ id "password"
-                    , type_ "password"
-                    ]
-                    []
+            , group []
+                [ label [ for "password"] [ text "Password" ]
+                , password [ id "password" ]
                 ]
-            , div []
+            , group []
                 [ button
-                    [ type_ "submit" ]
+                    [ Button.primary ]
                     [ text "Create my account" ]
                 ]
             ]
