@@ -33,7 +33,7 @@ type alias WebData a =
 
 
 type Msg
-    = SendHttpRequest
+    = FetchPosts
     | DataReceived (WebData (List Post))
 
 
@@ -42,8 +42,8 @@ view model =
     { title = "Http get example"
     , body =
         [ div []
-            [ button [ onClick SendHttpRequest ]
-                [ text "Get data from server" ]
+            [ button [ onClick FetchPosts ]
+                [ text "Refresh posts" ]
             , viewPostsOrError model
             ]
         ]
@@ -126,8 +126,8 @@ postDecoder =
         |> required "author" authorDecoder
 
 
-httpCommand : Cmd Msg
-httpCommand =
+fetchPostsCommand : Cmd Msg
+fetchPostsCommand =
     Http.get
         { url = "http://localhost:5019/posts"
         , expect = Http.expectJson (RemoteData.fromResult >> DataReceived) (list postDecoder)
@@ -156,8 +156,8 @@ createErrorMessageFromHttpError httpError =
 update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =
     case msg of
-        SendHttpRequest ->
-            ( { model | posts = RemoteData.Loading }, httpCommand)
+        FetchPosts ->
+            ( { model | posts = RemoteData.Loading }, fetchPostsCommand)
 
         DataReceived response ->
             ( { model
@@ -169,9 +169,9 @@ update msg model =
 
 init : flag -> ( Model, Cmd Msg )
 init _ =
-    ( { posts = RemoteData.NotAsked
+    ( { posts = RemoteData.Loading
       }
-    , Cmd.none
+    , fetchPostsCommand
     )
 
 
