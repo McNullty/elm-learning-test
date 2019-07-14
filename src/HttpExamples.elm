@@ -4,7 +4,7 @@ import Browser exposing (Document)
 import Html exposing (Html, button, div, h3, li, text, ul)
 import Html.Events exposing (onClick)
 import Http exposing (Response)
-import Json.Decode exposing (Decoder, decodeString, errorToString, list, string)
+import Json.Decode exposing (Decoder, list, string)
 
 
 type alias Model =
@@ -15,7 +15,7 @@ type alias Model =
 
 type Msg
     = SendHttpRequest
-    | DataReceived (Result Http.Error String)
+    | DataReceived (Result Http.Error (List String))
 
 
 init : flag -> ( Model, Cmd Msg )
@@ -102,15 +102,10 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         SendHttpRequest ->
-            ( model, Http.get { url = url, expect = Http.expectString DataReceived } )
+            ( model, Http.get { url = url, expect = Http.expectJson DataReceived nicknamesDecoder } )
 
-        DataReceived (Ok nicknamesJson) ->
-            case decodeString nicknamesDecoder nicknamesJson of
-                Ok nicknames ->
-                    ( { model | nicknames = nicknames }, Cmd.none )
-
-                Err errorMessage ->
-                    ( { model | errorMessage = Just (errorToString errorMessage) }, Cmd.none )
+        DataReceived (Ok nicknames) ->
+            ( { model | nicknames = nicknames }, Cmd.none )
 
         DataReceived (Err error) ->
             ( { model | errorMessage = Just (createErrorMessageFromHttpError error) }, Cmd.none )
