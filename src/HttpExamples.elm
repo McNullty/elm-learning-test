@@ -4,6 +4,7 @@ import Browser exposing (Document)
 import Html exposing (Html, button, div, h3, li, text, ul)
 import Html.Events exposing (onClick)
 import Http exposing (Response)
+import Json.Decode exposing (Decoder, decodeString, errorToString, list, string)
 
 
 type alias Model =
@@ -68,15 +69,13 @@ viewNickname nickname =
 
 url : String
 url =
-    "http://localhost:5016/old-school.txt"
-
-
-
+    "http://localhost:5019/nicknames"
+--    "http://localhost:5016/old-school.txt"
 --    "http://localhost:5016/invalid.txt"
 
 
-createErrorMessage : Http.Error -> String
-createErrorMessage httpError =
+createErrorMessageFromHttpError : Http.Error -> String
+createErrorMessageFromHttpError httpError =
     case httpError of
         Http.BadUrl message ->
             message
@@ -94,21 +93,27 @@ createErrorMessage httpError =
             response
 
 
+nicknamesDecoder : Decoder (List String)
+nicknamesDecoder =
+    list string
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         SendHttpRequest ->
             ( model, Http.get { url = url, expect = Http.expectString DataReceived } )
 
-        DataReceived (Ok nicknamesStr) ->
-            let
-                nicknames =
-                    String.split "," nicknamesStr
-            in
-            ( { model | nicknames = nicknames }, Cmd.none )
+        DataReceived (Ok nicknamesJson) ->
+            case decodeString nicknamesDecoder nicknamesJson of
+                Ok nicknames ->
+                    ( { model | nicknames = nicknames }, Cmd.none )
+
+                Err errorMessage ->
+                    ( { model | errorMessage = Just (errorToString errorMessage) }, Cmd.none )
 
         DataReceived (Err error) ->
-            ( { model | errorMessage = Just (createErrorMessage error) }, Cmd.none )
+            ( { model | errorMessage = Just (createErrorMessageFromHttpError error) }, Cmd.none )
 
 
 main : Program () Model Msg
