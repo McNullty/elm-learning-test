@@ -2,7 +2,8 @@
   "posts": [
     {
       "id": 1,
-      "title": "json-server"
+      "title": "json-server",
+      "author": null
     },
     {
       "id": 2,
