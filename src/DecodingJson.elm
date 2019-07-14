@@ -157,7 +157,7 @@ update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =
     case msg of
         SendHttpRequest ->
-            ( model, httpCommand)
+            ( { model | posts = RemoteData.Loading }, httpCommand)
 
         DataReceived response ->
             ( { model

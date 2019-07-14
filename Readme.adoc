@@ -15,3 +15,6 @@ Running server:
 or
 
 `json-server --watch server/db.json  -p 5019`
+
+or json server with delay
+`json-server --watch server/db.json -p 5019 --delay 2000`
