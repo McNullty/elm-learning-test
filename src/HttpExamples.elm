@@ -1,21 +1,24 @@
-module HttpExamples exposing (..)
+module HttpExamples exposing (Model, Msg(..), main, update, url, view, viewNickname)
 
 import Browser exposing (Document)
 import Html exposing (Html, button, div, h3, li, text, ul)
 import Html.Events exposing (onClick)
 import Http
 
+
 type alias Model =
     List String
+
 
 type Msg
     = SendHttpRequest
     | DataReceived (Result Http.Error String)
 
+
 view : Model -> Document Msg
 view model =
     { title = "Http get example"
-        , body =
+    , body =
         [ div []
             [ button [ onClick SendHttpRequest ]
                 [ text "Get data from server" ]
@@ -25,9 +28,11 @@ view model =
         ]
     }
 
+
 viewNickname : String -> Html Msg
 viewNickname nickname =
     li [] [ text nickname ]
+
 
 url : String
 url =
@@ -42,12 +47,14 @@ update msg model =
 
         DataReceived (Ok nicknamesStr) ->
             let
-                nicknames = String.split "," nicknamesStr
+                nicknames =
+                    String.split "," nicknamesStr
             in
-                ( nicknames, Cmd.none )
+            ( nicknames, Cmd.none )
 
         DataReceived (Err _) ->
-            ( [ "Error" ], Cmd.none)
+            ( [ "Error" ], Cmd.none )
+
 
 main : Program () Model Msg
 main =
