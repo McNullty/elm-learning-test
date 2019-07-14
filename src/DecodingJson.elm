@@ -104,7 +104,7 @@ authorDecoder : Decoder Author
 authorDecoder =
     Decode.succeed Author
         |> required "name" string
-        |> required "url" string
+        |> optional "url" string "http://dudeism.com"
 
 
 postDecoder : Decoder Post
