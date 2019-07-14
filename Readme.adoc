@@ -11,3 +11,7 @@ Installed json-server
 
 Running server:
 `json-server --watch server/old-school.json -p 5019`
+
+or
+
+`json-server --watch server/db.json  -p 5019`
