@@ -4,7 +4,8 @@ import Browser exposing (Document)
 import Html exposing (Html, button, div, h3, table, td, text, th, tr)
 import Html.Events exposing (onClick)
 import Http exposing (Response)
-import Json.Decode exposing (Decoder, field, int, list, map3, string)
+import Json.Decode as Decode exposing (Decoder, int, list, string)
+import Json.Decode.Pipeline exposing (required)
 import Result exposing (Result)
 
 type alias Post =
@@ -94,10 +95,10 @@ viewPost post =
 
 postDecoder : Decoder Post
 postDecoder =
-    map3 Post
-        (field "id" int)
-        (field "title" string)
-        (field "author" string)
+    Decode.succeed Post
+        |> required "id" int
+        |> required "title" string
+        |> required "author" string
 
 
 httpCommand : Cmd Msg
