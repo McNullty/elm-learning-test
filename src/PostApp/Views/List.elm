@@ -1,15 +1,12 @@
-module DecodingJson exposing (..)
+module PostApp.Views.List exposing (view)
 
 import Browser exposing (Document)
 import Html exposing (Html, a, button, div, h3, table, td, text, th, tr)
 import Html.Attributes exposing (href)
 import Html.Events exposing (onClick)
-import Http exposing (Response)
-import Json.Decode as Decode exposing (Decoder, int, list, string)
-import Json.Decode.Pipeline exposing (optional, required)
+import Http
 import PostApp.Types exposing (..)
-import RemoteData exposing (RemoteData)
-
+import RemoteData
 
 view : Model -> Document Msg
 view model =
@@ -85,29 +82,6 @@ viewPost post =
         ]
 
 
-authorDecoder : Decoder Author
-authorDecoder =
-    Decode.succeed Author
-        |> required "name" string
-        |> optional "url" string "http://dudeism.com"
-
-
-postDecoder : Decoder Post
-postDecoder =
-    Decode.succeed Post
-        |> required "id" int
-        |> required "title" string
-        |> required "author" authorDecoder
-
-
-fetchPostsCommand : Cmd Msg
-fetchPostsCommand =
-    Http.get
-        { url = "http://localhost:5019/posts"
-        , expect = Http.expectJson (RemoteData.fromResult >> DataReceived) (list postDecoder)
-        }
-
-
 createErrorMessageFromHttpError : Http.Error -> String
 createErrorMessageFromHttpError httpError =
     case httpError of
@@ -125,35 +99,3 @@ createErrorMessageFromHttpError httpError =
 
         Http.BadBody response ->
             response
-
-
-update : Msg -> Model -> ( Model, Cmd Msg)
-update msg model =
-    case msg of
-        FetchPosts ->
-            ( { model | posts = RemoteData.Loading }, fetchPostsCommand)
-
-        DataReceived response ->
-            ( { model
-                | posts = response
-              }
-            , Cmd.none
-            )
-
-
-init : flag -> ( Model, Cmd Msg )
-init _ =
-    ( { posts = RemoteData.Loading
-      }
-    , fetchPostsCommand
-    )
-
-
-main : Program () Model Msg
-main =
-    Browser.document
-        { init = init
-        , view = view
-        , update = update
-        , subscriptions = \_ -> Sub.none
-        }
