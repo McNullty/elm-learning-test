@@ -7,17 +7,20 @@ import Http exposing (Response)
 
 
 type alias Model =
-    { nicknames: List String
-    , errorMessage: Maybe String
+    { nicknames : List String
+    , errorMessage : Maybe String
     }
+
 
 type Msg
     = SendHttpRequest
     | DataReceived (Result Http.Error String)
 
-init : flag -> (Model, Cmd Msg)
+
+init : flag -> ( Model, Cmd Msg )
 init _ =
-    ( {nicknames = [], errorMessage = Nothing}, Cmd.none )
+    ( { nicknames = [], errorMessage = Nothing }, Cmd.none )
+
 
 view : Model -> Document Msg
 view model =
@@ -31,6 +34,7 @@ view model =
         ]
     }
 
+
 viewNicknamesOrError : Model -> Html Msg
 viewNicknamesOrError model =
     case model.errorMessage of
@@ -39,6 +43,7 @@ viewNicknamesOrError model =
 
         Nothing ->
             viewNicknames model.nicknames
+
 
 viewError : String -> Html Msg
 viewError errorMessage =
@@ -64,7 +69,11 @@ viewNickname nickname =
 url : String
 url =
     "http://localhost:5016/old-school.txt"
+
+
+
 --    "http://localhost:5016/invalid.txt"
+
 
 createErrorMessage : Http.Error -> String
 createErrorMessage httpError =
@@ -84,6 +93,7 @@ createErrorMessage httpError =
         Http.BadBody response ->
             response
 
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -95,10 +105,10 @@ update msg model =
                 nicknames =
                     String.split "," nicknamesStr
             in
-            ( {model | nicknames = nicknames}, Cmd.none )
+            ( { model | nicknames = nicknames }, Cmd.none )
 
         DataReceived (Err error) ->
-            ( {model | errorMessage = Just (createErrorMessage error)}, Cmd.none )
+            ( { model | errorMessage = Just (createErrorMessage error) }, Cmd.none )
 
 
 main : Program () Model Msg
