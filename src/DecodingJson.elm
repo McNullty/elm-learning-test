@@ -7,7 +7,7 @@ import Html.Events exposing (onClick)
 import Http exposing (Response)
 import Json.Decode as Decode exposing (Decoder, int, list, string)
 import Json.Decode.Pipeline exposing (optional, required)
-import Result exposing (Result)
+import RemoteData exposing (RemoteData)
 
 
 type alias Author =
@@ -15,21 +15,26 @@ type alias Author =
     , url : String
     }
 
+
 type alias Post =
     { id : Int
     , title : String
     , author : Author
     }
 
+
 type alias Model =
-    { posts: List Post
-    , errorMessage : Maybe String
+    { posts: WebData (List Post)
     }
+
+
+type alias WebData a =
+    RemoteData Http.Error a
 
 
 type Msg
     = SendHttpRequest
-    | DataReceived (Result Http.Error (List Post))
+    | DataReceived (WebData (List Post))
 
 
 view : Model -> Document Msg
@@ -47,12 +52,18 @@ view model =
 
 viewPostsOrError : Model -> Html Msg
 viewPostsOrError model =
-    case model.errorMessage of
-        Just message ->
-            viewError message
+    case model.posts of
+        RemoteData.NotAsked ->
+            text ""
 
-        Nothing ->
-            viewPosts model.posts
+        RemoteData.Loading ->
+            text "Loading..."
+
+        RemoteData.Failure httpError ->
+            viewError (createErrorMessageFromHttpError httpError)
+
+        RemoteData.Success posts ->
+            viewPosts posts
 
 
 viewError : String -> Html Msg
@@ -119,7 +130,7 @@ httpCommand : Cmd Msg
 httpCommand =
     Http.get
         { url = "http://localhost:5019/posts"
-        , expect = Http.expectJson DataReceived (list postDecoder)
+        , expect = Http.expectJson (RemoteData.fromResult >> DataReceived) (list postDecoder)
         }
 
 
@@ -148,17 +159,9 @@ update msg model =
         SendHttpRequest ->
             ( model, httpCommand)
 
-        DataReceived (Ok posts) ->
+        DataReceived response ->
             ( { model
-                | posts = posts
-                , errorMessage = Nothing
-              }
-            , Cmd.none
-            )
-
-        DataReceived (Err httpError) ->
-            ( { model
-                | errorMessage = Just (createErrorMessageFromHttpError httpError)
+                | posts = response
               }
             , Cmd.none
             )
@@ -166,8 +169,7 @@ update msg model =
 
 init : flag -> ( Model, Cmd Msg )
 init _ =
-    ( { posts = []
-      , errorMessage = Nothing
+    ( { posts = RemoteData.NotAsked
       }
     , Cmd.none
     )
