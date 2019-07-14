@@ -40,16 +40,14 @@ update msg model =
         SendHttpRequest ->
             ( model, Http.get { url = url, expect = Http.expectString DataReceived } )
 
-        DataReceived result ->
-            case result of
-                Ok nicknamesStr ->
-                    let
-                        nicknames = String.split "," nicknamesStr
-                    in
-                        ( nicknames, Cmd.none )
+        DataReceived (Ok nicknamesStr) ->
+            let
+                nicknames = String.split "," nicknamesStr
+            in
+                ( nicknames, Cmd.none )
 
-                Err _ ->
-                        ( [ "Error" ], Cmd.none)
+        DataReceived (Err _) ->
+            ( [ "Error" ], Cmd.none)
 
 main : Program () Model Msg
 main =
