@@ -5,7 +5,7 @@ import Html exposing (Html, button, div, h3, table, td, text, th, tr)
 import Html.Events exposing (onClick)
 import Http exposing (Response)
 import Json.Decode as Decode exposing (Decoder, int, list, string)
-import Json.Decode.Pipeline exposing (required)
+import Json.Decode.Pipeline exposing (optional, required)
 import Result exposing (Result)
 
 type alias Post =
@@ -98,7 +98,7 @@ postDecoder =
     Decode.succeed Post
         |> required "id" int
         |> required "title" string
-        |> required "author" string
+        |> optional "author" string "anonymous"
 
 
 httpCommand : Cmd Msg
