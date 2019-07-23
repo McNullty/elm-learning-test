@@ -79,6 +79,8 @@ viewPost post =
             [ text post.title ]
         , td []
             [ a [ href post.author.url ] [ text post.author.name ] ]
+        , td []
+            [ a [ href ""] [text "Edit"]]
         ]
 
 
