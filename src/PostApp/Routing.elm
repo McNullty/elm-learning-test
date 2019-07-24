@@ -1,6 +1,8 @@
-module PostApp.Routing exposing (..)
+module PostApp.Routing exposing (Route(..), fromUrl)
 
+import Browser.Navigation as Nav
 import Url as Url
+import Url.Builder as Builder
 import Url.Parser as Parser exposing ((</>))
 
 
@@ -10,19 +12,38 @@ type Route
     | NotFoundRoute
 
 
-extractRoute : Url.Url -> Maybe Route
-extractRoute url =
-    -- The RealWorld spec treats the fragment like a path.
-    -- This makes it *literally* the path, so we can proceed
-    -- with parsing as if it had been a normal path all along.
-    { url | path = Maybe.withDefault "" url.fragment, fragment = Nothing }
-        |> Parser.parse routeParser
+fromUrl : Url.Url -> Route
+fromUrl url =
+    Maybe.withDefault NotFoundRoute (Parser.parse parser url)
 
 
-routeParser : Parser.Parser (Route -> a) a
-routeParser =
+parser : Parser.Parser (Route -> a) a
+parser =
     Parser.oneOf
         [ Parser.map PostsRoute Parser.top
         , Parser.map PostsRoute (Parser.s "posts")
         , Parser.map PostRoute (Parser.s "posts" </> Parser.int)
         ]
+
+
+changeUrl : Nav.Key -> Route -> Cmd msg
+changeUrl key route =
+    Nav.replaceUrl key (toString route)
+
+
+pushUrl : Nav.Key -> Route -> Cmd msg
+pushUrl key route =
+    Nav.pushUrl key (toString route)
+
+
+toString : Route -> String
+toString route =
+    case route of
+        PostsRoute ->
+            Builder.relative [ "/posts" ] []
+
+        PostRoute postId->
+            Builder.relative [ "/posts", String.fromInt postId ] []
+
+        NotFoundRoute ->
+            "not-found"
