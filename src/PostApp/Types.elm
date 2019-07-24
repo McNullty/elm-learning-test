@@ -1,7 +1,10 @@
 module PostApp.Types exposing (..)
 
+import Browser
+import Browser.Navigation exposing (Key)
 import Http exposing (Response)
 import RemoteData exposing (RemoteData)
+import Url exposing (Url)
 
 type alias Author =
     { name : String
@@ -18,6 +21,8 @@ type alias Post =
 
 type alias Model =
     { posts: WebData (List Post)
+    , key: Key
+    , url: Url
     }
 
 
@@ -28,3 +33,5 @@ type alias WebData a =
 type Msg
     = FetchPosts
     | DataReceived (WebData (List Post))
+    | UrlChanged Url
+    | LinkClicked Browser.UrlRequest

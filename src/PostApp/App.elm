@@ -8,9 +8,11 @@ import PostApp.Views.List as List
 
 main : Program () Model Msg
 main =
-    Browser.document
+    Browser.application
         { init = State.init
         , view = List.view
         , update = State.update
         , subscriptions = \_ -> Sub.none
+        , onUrlRequest = LinkClicked
+        , onUrlChange = UrlChanged
         }
