@@ -72,16 +72,20 @@ viewTableHeader =
 
 viewPost : Post -> Html Msg
 viewPost post =
-    tr []
-        [ td []
-            [ text (String.fromInt post.id) ]
-        , td []
-            [ text post.title ]
-        , td []
-            [ a [ href post.author.url ] [ text post.author.name ] ]
-        , td []
-            [ a [ href ""] [text "Edit"]]
-        ]
+    let
+        postPath =
+            "/posts/" ++ (String.fromInt post.id)
+    in
+        tr []
+            [ td []
+                [ text (String.fromInt post.id) ]
+            , td []
+                [ text post.title ]
+            , td []
+                [ a [ href post.author.url ] [ text post.author.name ] ]
+            , td []
+                [ a [ href postPath] [text "Edit"]]
+            ]
 
 
 createErrorMessageFromHttpError : Http.Error -> String
