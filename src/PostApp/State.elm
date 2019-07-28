@@ -22,11 +22,7 @@ update msg model =
             )
 
         LinkClicked (Browser.Internal url) ->
-            case url.fragment of
-                Nothing ->
-                    (model, Cmd.none)
-                Just _ ->
-                    ( model, Nav.pushUrl model.key (Url.toString url) )
+            ( model, Nav.pushUrl model.key (Url.toString url) )
 
         LinkClicked (Browser.External href) ->
             (model, Nav.load href)
