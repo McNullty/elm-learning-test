@@ -2,11 +2,11 @@ module PostApp.View exposing (..)
 
 import Browser exposing (Document)
 import Html exposing (Html, h3, text)
+import PostApp.Misc exposing (findPostById)
 import PostApp.Routing as Route
 import PostApp.Types as Types exposing (WebData)
 import PostApp.Views.Edit as Edit
 import PostApp.Views.List as List
-import RemoteData exposing (RemoteData)
 
 
 view : Types.Model -> Document Types.Msg
@@ -33,17 +33,6 @@ viewBody model =
         Route.NotFoundRoute ->
             notFoundView
 
-
-findPostById : Types.PostId -> WebData (List Types.Post) -> Maybe Types.Post
-findPostById postId postsList =
-    case RemoteData.toMaybe postsList of
-        Just posts ->
-            posts
-                |> List.filter (\post -> post.id == postId)
-                |> List.head
-
-        Nothing ->
-            Nothing
 
 notFoundView : Html msg
 notFoundView =

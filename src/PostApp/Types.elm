@@ -41,3 +41,5 @@ type Msg
     | UpdateTitle PostId String
     | UpdateAuthorName PostId String
     | UpdateAuthorUrl PostId String
+    | SubmitUpdatedPost PostId
+    | PostUpdated (Result Http.Error Post)

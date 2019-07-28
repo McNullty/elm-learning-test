@@ -2,7 +2,8 @@ module PostApp.State exposing (..)
 
 import Browser
 import Browser.Navigation as Nav
-import PostApp.Rest exposing (fetchPostsCommand)
+import PostApp.Misc exposing (findPostById)
+import PostApp.Rest exposing (fetchPostsCommand, updatePostCommand)
 import PostApp.Routing as Route
 import PostApp.Types exposing (Model, Msg(..), PostId, WebData, Post)
 import RemoteData
@@ -38,6 +39,18 @@ update msg model =
 
         UpdateAuthorUrl postId newUrl ->
             updateField postId newUrl setAuthorUrl model
+
+        SubmitUpdatedPost postId ->
+            case findPostById postId model.posts of
+                Just post ->
+                    ( model, updatePostCommand post)
+
+                Nothing ->
+                    ( model, Cmd.none )
+
+        PostUpdated _ ->
+            ( model, Cmd.none )
+
 
 init : flag -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
