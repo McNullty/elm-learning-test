@@ -1,4 +1,4 @@
-module PostApp.Views.Edit exposing (..)
+module PostApp.Views.Edit exposing (view)
 
 import Html exposing (Html, br, button, div, h3, input, text)
 import Html.Attributes exposing (type_, value)
