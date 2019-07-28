@@ -30,9 +30,14 @@ type alias Model =
 type alias WebData a =
     RemoteData Http.Error a
 
+type alias PostId =
+    Int
 
 type Msg
     = FetchPosts
     | DataReceived (WebData (List Post))
     | UrlChanged Url
     | LinkClicked Browser.UrlRequest
+    | UpdateTitle PostId String
+    | UpdateAuthorName PostId String
+    | UpdateAuthorUrl PostId String

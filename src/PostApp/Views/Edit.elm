@@ -2,7 +2,8 @@ module PostApp.Views.Edit exposing (view)
 
 import Html exposing (Html, a, br, button, div, h3, input, text)
 import Html.Attributes exposing (href, type_, value)
-import PostApp.Types exposing (Msg, Post)
+import Html.Events exposing (onInput)
+import PostApp.Types exposing (Msg(..), Post)
 
 view : Post -> Html Msg
 view post =
@@ -22,6 +23,18 @@ editForm post =
             , input
                 [ type_ "text"
                 , value post.title
+                , onInput (UpdateTitle post.id)
+                ]
+                []
+            ]
+        , br [] []
+        , div []
+            [ text "Author name"
+            , br [] []
+            , input
+                [ type_ "text"
+                , value post.author.name
+                , onInput (UpdateAuthorName post.id)
                 ]
                 []
             ]
@@ -32,6 +45,7 @@ editForm post =
             , input
                 [ type_ "text"
                 , value post.author.url
+                , onInput (UpdateAuthorUrl post.id)
                 ]
                 []
             ]

@@ -34,7 +34,7 @@ viewBody model =
             notFoundView
 
 
-findPostById : Int -> WebData (List Types.Post) -> Maybe Types.Post
+findPostById : Types.PostId -> WebData (List Types.Post) -> Maybe Types.Post
 findPostById postId postsList =
     case RemoteData.toMaybe postsList of
         Just posts ->
