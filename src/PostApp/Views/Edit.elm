@@ -11,6 +11,7 @@ view post =
         , editForm post
         ]
 
+
 editForm : Post -> Html Msg
 editForm post =
     Html.form []
@@ -21,6 +22,7 @@ editForm post =
                 [ type_ "text"
                 , value post.title
                 ]
+                []
             ]
         , br [] []
         , div []
@@ -30,6 +32,7 @@ editForm post =
                 [ type_ "text"
                 , value post.author.url
                 ]
+                []
             ]
         , br [] []
         , div []
