@@ -3,6 +3,7 @@ module PostApp.State exposing (..)
 import Browser
 import Browser.Navigation as Nav
 import PostApp.Rest exposing (fetchPostsCommand)
+import PostApp.Routing as Route
 import PostApp.Types exposing (..)
 import RemoteData
 import Url exposing (Url)
@@ -31,14 +32,14 @@ update msg model =
             (model, Nav.load href)
 
         UrlChanged url ->
-            ({model | url = url}, Cmd.none)
+            ({model | route = Route.fromUrl url}, Cmd.none)
 
 
 init : flag -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
     ( { posts = RemoteData.Loading
       , key = key
-      , url = url
+      , route = Route.fromUrl url
       }
     , fetchPostsCommand
     )

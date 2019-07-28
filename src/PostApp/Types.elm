@@ -3,6 +3,7 @@ module PostApp.Types exposing (..)
 import Browser
 import Browser.Navigation exposing (Key)
 import Http exposing (Response)
+import PostApp.Routing exposing (Route)
 import RemoteData exposing (RemoteData)
 import Url exposing (Url)
 
@@ -22,7 +23,7 @@ type alias Post =
 type alias Model =
     { posts: WebData (List Post)
     , key: Key
-    , url: Url
+    , route: Route
     }
 
 
