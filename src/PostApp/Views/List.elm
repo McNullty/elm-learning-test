@@ -1,10 +1,19 @@
-module PostApp.Views.List exposing (viewPostsOrError)
+module PostApp.Views.List exposing (view)
 
-import Html exposing (Html, a, div, h3, table, td, text, th, tr)
+import Html exposing (Html, a, button, div, h3, table, td, text, th, tr)
 import Html.Attributes exposing (href)
+import Html.Events exposing (onClick)
 import Http
 import PostApp.Types exposing (..)
 import RemoteData
+
+view : Model -> Html Msg
+view model =
+    div []
+        [ button [ onClick FetchPosts ]
+            [ text "Refresh posts" ]
+        , viewPostsOrError model
+        ]
 
 viewPostsOrError : Model -> Html Msg
 viewPostsOrError model =
