@@ -28,7 +28,7 @@ viewBody model =
                     Edit.view post
 
                 Nothing ->
-                    notFoundView
+                    waitingForResponseView
 
         Route.NotFoundRoute ->
             notFoundView
@@ -37,3 +37,7 @@ viewBody model =
 notFoundView : Html msg
 notFoundView =
     h3 [] [ text "Oops! The page you requested was not found!" ]
+
+waitingForResponseView : Html msg
+waitingForResponseView =
+    h3 [] [ text "Waiting for response from servers!" ]
