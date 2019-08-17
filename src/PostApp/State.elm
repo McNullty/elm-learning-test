@@ -11,6 +11,8 @@ import Url exposing (Url)
 
 update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =
+    let _ = Debug.log "Update status: " msg
+    in
     case msg of
         FetchPosts ->
             ( { model | posts = RemoteData.Loading }, fetchPostsCommand)
