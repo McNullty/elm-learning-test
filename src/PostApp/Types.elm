@@ -42,4 +42,4 @@ type Msg
     | UpdateAuthorName PostId String
     | UpdateAuthorUrl PostId String
     | SubmitUpdatedPost PostId
-    | PostUpdated (Result Http.Error Post)
+    | PostUpdated (WebData Post)

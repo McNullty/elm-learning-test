@@ -53,7 +53,7 @@ updatePostCommand post =
         , headers = []
         , url = "http://localhost:5019/posts/" ++ (String.fromInt post.id)
         , body = Http.jsonBody (postEncoder post)
-        , expect = Http.expectJson PostUpdated postDecoder
+        , expect = Http.expectJson (RemoteData.fromResult >> PostUpdated) postDecoder
         , timeout = Nothing
         , tracker = Nothing
         }
