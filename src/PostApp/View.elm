@@ -41,7 +41,7 @@ viewBody model =
                                         waitingForResponseView
 
                             Route.NewPostRoute ->
-                                New.view
+                                New.view model
 
                             Route.NotFoundRoute ->
                                 notFoundView

@@ -78,12 +78,14 @@ update msg model =
             updateNewPost newUrl setAuthorUrl model
 
         CreateNewPost ->
-            ( model, createPostCommand model.newPost)
+            ( { model | networkOperation = RemoteData.Loading }
+            , createPostCommand model.newPost)
 
         PostCreated (RemoteData.Success createdPost) ->
             ( {model
                 | posts = addNewPost createdPost model.posts
-                , newPost = emptyPost }
+                , newPost = emptyPost
+                , networkOperation = RemoteData.Success "OK"}
             , Cmd.none )
 
         PostCreated _ ->
