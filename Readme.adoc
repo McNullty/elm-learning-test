@@ -24,4 +24,4 @@ or json server with delay
 `sudo npm install -g elm-live --unsafe-perm=true --allow-root`
 
 Running elm-live
-`elm-live src/PostApp/App.elm --pushstate`
+`elm-live src/PostApp/App.elm --open --pushstate -- --output=elm.js`
