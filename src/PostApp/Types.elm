@@ -25,6 +25,7 @@ type alias Model =
     , key: Key
     , route: Route
     , newPost: Post
+    , networkOperation: RemoteData Http.Error String
     }
 
 

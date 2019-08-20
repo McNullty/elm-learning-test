@@ -35,7 +35,7 @@ viewBody model =
                             Route.PostRoute postId ->
                                 case findPostById postId model.posts of
                                     Just post ->
-                                        Edit.view post
+                                        Edit.view post model
 
                                     Nothing ->
                                         waitingForResponseView

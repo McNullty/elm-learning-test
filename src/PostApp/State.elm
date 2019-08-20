@@ -47,13 +47,15 @@ update msg model =
         SubmitUpdatedPost postId ->
             case findPostById postId model.posts of
                 Just post ->
-                    ( model, updatePostCommand post)
+                    ( { model | networkOperation = RemoteData.Loading }
+                    , updatePostCommand post)
 
                 Nothing ->
                     ( model, Cmd.none )
 
         PostUpdated _ ->
-            ( model, Cmd.none )
+            ( { model | networkOperation = RemoteData.Success "OK" }
+            , Cmd.none )
 
         DeletePost postId ->
             case findPostById postId model.posts of
@@ -114,6 +116,7 @@ init _ url key =
       , key = key
       , route = Route.fromUrl url
       , newPost = emptyPost
+      , networkOperation = RemoteData.Success "OK"
       }
     , fetchPostsCommand
     )

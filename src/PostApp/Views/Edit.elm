@@ -4,16 +4,19 @@ import Bootstrap.Alert as Alert
 import Bootstrap.Button as Button exposing (button, onClick)
 import Bootstrap.Form as Form
 import Bootstrap.Form.Input as Input
+import Bootstrap.Spinner as Spinner
 import Html exposing (Html, div, h3, text)
 import Html.Attributes exposing (for, href)
-import PostApp.Types exposing (Msg(..), Post)
+import PostApp.Types exposing (Model, Msg(..), Post)
+import RemoteData exposing (RemoteData)
 
-view : Post -> Html Msg
-view post =
+view : Post -> Model -> Html Msg
+view post model =
     div []
         [ Alert.link [ href "/posts" ] [ text "Back" ]
         , h3 [] [ text "Edit Post"]
         , editForm post
+        , showNetworkOperation model
         ]
 
 
@@ -51,3 +54,14 @@ editForm post =
                 [text "Submit"]
             ]
         ]
+
+
+showNetworkOperation : Model -> Html Msg
+showNetworkOperation model =
+    case model.networkOperation of
+        RemoteData.Loading ->
+            div []
+                [Spinner.spinner [] []]
+        _ ->
+            div []
+                []
