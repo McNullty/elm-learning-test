@@ -1,8 +1,10 @@
 module PostApp.Views.List exposing (view)
 
-import Html exposing (Html, a, br, button, div, h3, table, td, text, th, tr)
+import Bootstrap.Alert as Alert
+import Bootstrap.Button as Button exposing (button, onClick)
+import Bootstrap.Table as Table exposing (Row, THead)
+import Html exposing (Html, br, div, h3, text)
 import Html.Attributes exposing (href)
-import Html.Events exposing (onClick)
 import Http
 import PostApp.Types exposing (..)
 import RemoteData
@@ -10,11 +12,11 @@ import RemoteData
 view : Model -> Html Msg
 view model =
     div []
-        [ button [ onClick FetchPosts ]
+        [ button [ onClick FetchPosts, Button.large, Button.primary ]
             [ text "Refresh posts" ]
         , br [] []
         , br [] []
-        , a [href "/posts/new"] [text "Create new post"]
+        , Alert.link [href "/posts/new"] [text "Create new post"]
         , viewPostsOrError model
         ]
 
@@ -50,40 +52,40 @@ viewPosts : List Post -> Html Msg
 viewPosts posts =
     div []
         [ h3 [] [ text "Posts" ]
-        , table []
-            ([ viewTableHeader ] ++ List.map viewPost posts)
+        , Table.simpleTable
+            ( viewTableHeader
+            , Table.tbody []
+                (List.map viewPost posts)
+            )
         ]
 
 
-viewTableHeader : Html Msg
+viewTableHeader : THead Msg
 viewTableHeader =
-    tr []
-        [ th []
-            [ text "ID" ]
-        , th []
-            [ text "Title" ]
-        , th []
-            [ text "Author" ]
+    Table.simpleThead
+        [ Table.th [] [ text "ID" ]
+        , Table.th [] [ text "Title" ]
+        , Table.th [] [ text "Author" ]
         ]
 
 
-viewPost : Post -> Html Msg
+viewPost : Post -> Row Msg
 viewPost post =
     let
         postPath =
             "/posts/" ++ (String.fromInt post.id)
     in
-        tr []
-            [ td []
+        Table.tr []
+            [ Table.td []
                 [ text (String.fromInt post.id) ]
-            , td []
+            , Table.td []
                 [ text post.title ]
-            , td []
-                [ a [ href post.author.url ] [ text post.author.name ] ]
-            , td []
-                [ a [ href postPath] [text "Edit"]]
-            , td []
-                [ button [onClick (DeletePost post.id)] [text "Delete"]]
+            , Table.td []
+                [ Alert.link [ href post.author.url ] [ text post.author.name ] ]
+            , Table.td []
+                [ Alert.link [ href postPath] [text "Edit"]]
+            , Table.td []
+                [ button [onClick (DeletePost post.id), Button.large, Button.primary ] [text "Delete"]]
             ]
 
 
