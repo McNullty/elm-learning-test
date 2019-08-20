@@ -18,6 +18,8 @@ view model =
         , br [] []
         , br [] []
         , Alert.link [href "/posts/new"] [text "Create new post"]
+        , br [] []
+        , br [] []
         , viewPostsOrError model
         ]
 
