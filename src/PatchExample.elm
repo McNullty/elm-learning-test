@@ -1,11 +1,11 @@
 module PatchExample exposing (..)
 
 import Browser exposing (Document)
-import Html exposing (Html, button, div, h3, input, li, text, ul)
+import Html exposing (Html, button, div, input, text)
 import Html.Attributes exposing (type_, value)
 import Html.Events exposing (onClick, onInput)
 import Http exposing (Response)
-import Json.Decode as Decode exposing (Decoder, int, list, string)
+import Json.Decode as Decode exposing (Decoder, int, string)
 import Json.Decode.Pipeline exposing (required)
 import Json.Encode as Encode
 import RemoteData exposing (RemoteData)
@@ -32,17 +32,19 @@ view : Post -> Document Msg
 view post =
     { title = "Http get example"
     , body =
-        [ div []
-            [ input
-                [ type_ "text"
-                , value post.title
-                , onInput (UpdateTitle post.id)
+        [ Html.form []
+            [ div []
+                [ input
+                    [ type_ "text"
+                    , value post.title
+                    , onInput (UpdateTitle post.id)
+                    ]
+                    []
+                , button
+                    [ onClick (PatchPost post.id) ]
+                    [ text "Patch request" ]
                 ]
-                []
-            , button
-                [ onClick (PatchPost post.id) ]
-                [ text "Patch request" ]
-            ]
+             ]
         ]
     }
 
