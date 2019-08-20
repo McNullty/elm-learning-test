@@ -2,6 +2,7 @@ module PostApp.Views.List exposing (view)
 
 import Bootstrap.Alert as Alert
 import Bootstrap.Button as Button exposing (button, onClick)
+import Bootstrap.Spinner as Spinner
 import Bootstrap.Table as Table exposing (Row, THead)
 import Html exposing (Html, br, div, h3, text)
 import Html.Attributes exposing (href)
@@ -27,7 +28,8 @@ viewPostsOrError model =
             text ""
 
         RemoteData.Loading ->
-            text "Loading..."
+            div []
+                [Spinner.spinner [] []]
 
         RemoteData.Failure httpError ->
             viewError (createErrorMessageFromHttpError httpError)
