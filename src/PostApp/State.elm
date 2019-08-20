@@ -64,7 +64,7 @@ update msg model =
                     ( model, Cmd.none )
 
         PostDeleted _ ->
-            ( model, Cmd.none )
+            ( model, fetchPostsCommand )
 
 
 init : flag -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
