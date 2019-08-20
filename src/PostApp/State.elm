@@ -11,7 +11,9 @@ import Url exposing (Url)
 
 update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =
-    let _ = Debug.log "Update status: " msg
+    let
+        _ = Debug.log "Msg: " msg
+        _ = Debug.log "Model: " msg
     in
     case msg of
         FetchPosts ->
