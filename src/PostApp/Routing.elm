@@ -7,6 +7,7 @@ import Url.Parser as Parser exposing ((</>))
 type Route
     = PostsRoute
     | PostRoute Int
+    | NewPostRoute
     | NotFoundRoute
 
 
@@ -21,4 +22,5 @@ parser =
         [ Parser.map PostsRoute Parser.top
         , Parser.map PostsRoute (Parser.s "posts")
         , Parser.map PostRoute (Parser.s "posts" </> Parser.int)
+        , Parser.map NewPostRoute (Parser.s "posts" </> Parser.s "new")
         ]

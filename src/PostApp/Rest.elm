@@ -1,4 +1,4 @@
-module PostApp.Rest exposing (fetchPostsCommand, updatePostCommand, deletePostCommand)
+module PostApp.Rest exposing (fetchPostsCommand, updatePostCommand, deletePostCommand, createPostCommand)
 
 import Http
 import Json.Decode as Decode exposing (Decoder, int, list, string)
@@ -27,6 +27,14 @@ postEncoder post =
     Encode.object
         [ ( "id", Encode.int post.id )
         , ( "title", Encode.string post.title )
+        , ( "author", authorEncoder post.author )
+        ]
+
+
+newPostEncoder : Post -> Encode.Value
+newPostEncoder post =
+    Encode.object
+        [ ( "title", Encode.string post.title )
         , ( "author", authorEncoder post.author )
         ]
 
@@ -68,4 +76,12 @@ deletePostCommand post =
         , expect = Http.expectString (RemoteData.fromResult >> PostDeleted)
         , timeout = Nothing
         , tracker = Nothing
+        }
+
+createPostCommand : Post -> Cmd Msg
+createPostCommand post =
+    Http.post
+        { url = "http://localhost:5019/posts"
+        , body = Http.jsonBody (newPostEncoder post)
+        , expect = Http.expectJson (RemoteData.fromResult >> PostCreated) postDecoder
         }

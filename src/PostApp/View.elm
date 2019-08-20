@@ -7,6 +7,7 @@ import PostApp.Routing as Route
 import PostApp.Types as Types exposing (WebData)
 import PostApp.Views.Edit as Edit
 import PostApp.Views.List as List
+import PostApp.Views.New as New
 
 
 view : Types.Model -> Document Types.Msg
@@ -29,6 +30,9 @@ viewBody model =
 
                 Nothing ->
                     waitingForResponseView
+
+        Route.NewPostRoute ->
+            New.view
 
         Route.NotFoundRoute ->
             notFoundView

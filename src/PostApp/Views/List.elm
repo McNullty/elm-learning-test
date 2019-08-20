@@ -1,6 +1,6 @@
 module PostApp.Views.List exposing (view)
 
-import Html exposing (Html, a, button, div, h3, table, td, text, th, tr)
+import Html exposing (Html, a, br, button, div, h3, table, td, text, th, tr)
 import Html.Attributes exposing (href)
 import Html.Events exposing (onClick)
 import Http
@@ -12,6 +12,9 @@ view model =
     div []
         [ button [ onClick FetchPosts ]
             [ text "Refresh posts" ]
+        , br [] []
+        , br [] []
+        , a [href "/posts/new"] [text "Create new post"]
         , viewPostsOrError model
         ]
 

@@ -3,9 +3,9 @@ module PostApp.State exposing (..)
 import Browser
 import Browser.Navigation as Nav
 import PostApp.Misc exposing (findPostById)
-import PostApp.Rest exposing (deletePostCommand, fetchPostsCommand, updatePostCommand)
+import PostApp.Rest exposing (createPostCommand, deletePostCommand, fetchPostsCommand, updatePostCommand)
 import PostApp.Routing as Route
-import PostApp.Types exposing (Model, Msg(..), PostId, WebData, Post)
+import PostApp.Types exposing (Author, Model, Msg(..), Post, PostId, WebData)
 import RemoteData
 import Url exposing (Url)
 
@@ -66,15 +66,54 @@ update msg model =
         PostDeleted _ ->
             ( model, fetchPostsCommand )
 
+        NewPostTitle newTitle ->
+            updateNewPost newTitle setTitle model
+
+        NewAuthorName newName ->
+            updateNewPost newName setAuthorName model
+
+        NewAuthorUrl newUrl ->
+            updateNewPost newUrl setAuthorUrl model
+
+        CreateNewPost ->
+            ( model, createPostCommand model.newPost)
+
+        PostCreated createdPost ->
+            ( model, Cmd.none )
+
+
+tempPostId =
+    -1
+
+
+emptyPost : Post
+emptyPost =
+    Author "" ""
+        |> Post tempPostId ""
+
 
 init : flag -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
     ( { posts = RemoteData.Loading
       , key = key
       , route = Route.fromUrl url
+      , newPost = emptyPost
       }
     , fetchPostsCommand
     )
+
+
+updateNewPost :
+    String
+    -> (String -> Post -> Post)
+    -> Model
+    -> ( Model, Cmd Msg )
+updateNewPost newValue updateFunction model =
+    let
+        updatedNewPost =
+            updateFunction newValue model.newPost
+    in
+        ( { model | newPost = updatedNewPost }, Cmd.none )
 
 
 updateField :

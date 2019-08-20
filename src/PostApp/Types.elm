@@ -24,6 +24,7 @@ type alias Model =
     { posts: WebData (List Post)
     , key: Key
     , route: Route
+    , newPost: Post
     }
 
 
@@ -45,3 +46,8 @@ type Msg
     | PostUpdated (WebData Post)
     | DeletePost PostId
     | PostDeleted (WebData String)
+    | NewPostTitle String
+    | NewAuthorName String
+    | NewAuthorUrl String
+    | CreateNewPost
+    | PostCreated (WebData Post)
