@@ -17,11 +17,14 @@ update msg model =
     in
     case msg of
         FetchPosts ->
-            ( { model | posts = RemoteData.Loading }, fetchPostsCommand)
+            ( { model | posts = RemoteData.Loading
+                      , networkOperation = RemoteData.Loading}
+            , fetchPostsCommand)
 
         DataReceived response ->
             ( { model
                 | posts = response
+                , networkOperation = RemoteData.Success "OK"
               }
             , Cmd.none
             )
@@ -60,7 +63,8 @@ update msg model =
         DeletePost postId ->
             case findPostById postId model.posts of
                 Just post ->
-                    ( model, deletePostCommand post)
+                    ( { model | networkOperation = RemoteData.Loading }
+                    , deletePostCommand post)
 
                 Nothing ->
                     ( model, Cmd.none )

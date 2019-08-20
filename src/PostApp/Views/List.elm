@@ -21,6 +21,7 @@ view model =
         , br [] []
         , br [] []
         , viewPostsOrError model
+        , showNetworkOperation model
         ]
 
 viewPostsOrError : Model -> Html Msg
@@ -37,7 +38,8 @@ viewPostsOrError model =
             viewError (createErrorMessageFromHttpError httpError)
 
         RemoteData.Success posts ->
-            viewPosts posts
+            div []
+                [ viewPosts posts]
 
 
 viewError : String -> Html Msg
@@ -110,3 +112,14 @@ createErrorMessageFromHttpError httpError =
 
         Http.BadBody response ->
             response
+
+
+showNetworkOperation : Model -> Html Msg
+showNetworkOperation model =
+    case model.networkOperation of
+        RemoteData.Loading ->
+            div []
+                [Spinner.spinner [] []]
+        _ ->
+            div []
+                []
