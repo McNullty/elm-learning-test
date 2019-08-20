@@ -16,7 +16,7 @@ view =
 
 newPostForm : Html Msg
 newPostForm =
-    Html.form []
+    div []
         [ div []
             [ text "Title"
             , br [] []
