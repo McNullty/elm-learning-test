@@ -16,7 +16,7 @@ view post =
 
 editForm : Post -> Html Msg
 editForm post =
-    Html.form []
+    div []
         [ div []
             [ text "Title"
             , br [] []
