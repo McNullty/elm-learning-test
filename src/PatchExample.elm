@@ -11,35 +11,38 @@ import Json.Encode as Encode
 import RemoteData exposing (RemoteData)
 
 
-type alias Model =
-    { title : String
-    , errorMessage : Maybe String
+type alias Post =
+    { id : Int
+    , title : String
     }
 
 
---type Msg
---    = SendHttpRequest Post
---    | UpdatePost Int String
+type Msg
+    = UpdateTitle Int String
+    | PatchPost Int
 --    | PostUpdated (RemoteData Http.Error Post)
 --    | DataReceived (Result Http.Error String)
 
 
---init : flag -> ( Model, Cmd Msg )
+init : flag -> ( Post, Cmd Msg )
 init _ =
-    ( { title = "", errorMessage = Nothing }, Cmd.none )
+    ( { id = 1, title = ""}, Cmd.none )
 
 
---view : Model -> Document Msg
-view model =
+view : Post -> Document Msg
+view post =
     { title = "Http get example"
     , body =
         [ div []
-            [ button []
+            [ input
+                [ type_ "text"
+                , value post.title
+                , onInput (UpdateTitle post.id)
+                ]
+                []
+            , button
+                [ onClick (PatchPost post.id) ]
                 [ text "Patch request" ]
-            , input [ type_ "text"
-                    , value model.title
-                    ]
-                    []
             ]
         ]
     }
@@ -81,10 +84,6 @@ url =
 --        |> required "id" int
 --        |> required "title" string
 --
---type alias Post =
---    { id : Int
---    , title : String
---    }
 --
 --updatePostCommand : Post -> Cmd Msg
 --updatePostCommand post =
@@ -111,10 +110,19 @@ url =
 --            ( { model | errorMessage = Just (createErrorMessageFromHttpError error) }, Cmd.none )
 --
 
-update msg model =
-    (model, Cmd.none)
+update : Msg -> Post -> ( Post, Cmd Msg )
+update msg post =
+    let
+        _ = Debug.log "Msg: " msg
+        _ = Debug.log "Post: " post
+    in
+    case msg of
+        UpdateTitle id title ->
+            ( { post | title = title }, Cmd.none)
+        PatchPost id ->
+            (post, Cmd.none)
 
-main : Program () Model msg
+main : Program () Post Msg
 main =
     Browser.document
         { init = init
