@@ -8,6 +8,7 @@ import Html exposing (Html, br, div, h3, text)
 import Html.Attributes exposing (href)
 import Http
 import PostApp.Types exposing (..)
+import PostApp.Views.Common exposing (showNetworkOperation)
 import RemoteData
 
 view : Model -> Html Msg
@@ -112,14 +113,3 @@ createErrorMessageFromHttpError httpError =
 
         Http.BadBody response ->
             response
-
-
-showNetworkOperation : Model -> Html Msg
-showNetworkOperation model =
-    case model.networkOperation of
-        RemoteData.Loading ->
-            div []
-                [Spinner.spinner [] []]
-        _ ->
-            div []
-                []
