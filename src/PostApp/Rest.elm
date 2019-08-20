@@ -1,4 +1,4 @@
-module PostApp.Rest exposing (fetchPostsCommand, updatePostCommand)
+module PostApp.Rest exposing (fetchPostsCommand, updatePostCommand, deletePostCommand)
 
 import Http
 import Json.Decode as Decode exposing (Decoder, int, list, string)
@@ -58,3 +58,14 @@ updatePostCommand post =
         , tracker = Nothing
         }
 
+deletePostCommand : Post -> Cmd Msg
+deletePostCommand post =
+    Http.request
+        { method = "DELETE"
+        , headers = []
+        , url = "http://localhost:5019/posts/" ++ (String.fromInt post.id)
+        , body = Http.emptyBody
+        , expect = Http.expectString (RemoteData.fromResult >> PostDeleted)
+        , timeout = Nothing
+        , tracker = Nothing
+        }

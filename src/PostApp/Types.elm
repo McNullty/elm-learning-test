@@ -43,3 +43,5 @@ type Msg
     | UpdateAuthorUrl PostId String
     | SubmitUpdatedPost PostId
     | PostUpdated (WebData Post)
+    | DeletePost PostId
+    | PostDeleted (WebData String)

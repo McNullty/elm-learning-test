@@ -3,7 +3,7 @@ module PostApp.State exposing (..)
 import Browser
 import Browser.Navigation as Nav
 import PostApp.Misc exposing (findPostById)
-import PostApp.Rest exposing (fetchPostsCommand, updatePostCommand)
+import PostApp.Rest exposing (deletePostCommand, fetchPostsCommand, updatePostCommand)
 import PostApp.Routing as Route
 import PostApp.Types exposing (Model, Msg(..), PostId, WebData, Post)
 import RemoteData
@@ -53,6 +53,17 @@ update msg model =
                     ( model, Cmd.none )
 
         PostUpdated _ ->
+            ( model, Cmd.none )
+
+        DeletePost postId ->
+            case findPostById postId model.posts of
+                Just post ->
+                    ( model, deletePostCommand post)
+
+                Nothing ->
+                    ( model, Cmd.none )
+
+        PostDeleted _ ->
             ( model, Cmd.none )
 
 
