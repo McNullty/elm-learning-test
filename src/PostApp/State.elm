@@ -78,8 +78,24 @@ update msg model =
         CreateNewPost ->
             ( model, createPostCommand model.newPost)
 
-        PostCreated createdPost ->
+        PostCreated (RemoteData.Success createdPost) ->
+            ( {model
+                | posts = addNewPost createdPost model.posts
+                , newPost = emptyPost }
+            , Cmd.none )
+
+        PostCreated _ ->
             ( model, Cmd.none )
+
+
+addNewPost : Post -> WebData (List Post) -> WebData (List Post)
+addNewPost newPost posts =
+    let
+        appendPost : List Post -> List Post
+        appendPost listOfPosts =
+            List.append listOfPosts [ newPost ]
+    in
+        RemoteData.map appendPost posts
 
 
 tempPostId =
