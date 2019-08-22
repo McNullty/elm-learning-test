@@ -25,7 +25,7 @@ type alias Model =
     , key: Key
     , route: Route
     , newPost: Post
-    , networkOperation: RemoteData Http.Error String
+    , networkOperation: NetworkOperations
     }
 
 
@@ -34,6 +34,10 @@ type alias WebData a =
 
 type alias PostId =
     Int
+
+type NetworkOperations
+    = Loading
+    | Done
 
 type Msg
     = FetchPosts

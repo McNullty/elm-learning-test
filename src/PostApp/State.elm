@@ -5,7 +5,7 @@ import Browser.Navigation as Nav
 import PostApp.Misc exposing (findPostById)
 import PostApp.Rest exposing (createPostCommand, deletePostCommand, fetchPostsCommand, updatePostCommand)
 import PostApp.Routing as Route
-import PostApp.Types exposing (Author, Model, Msg(..), Post, PostId, WebData)
+import PostApp.Types exposing (Author, Model, Msg(..), NetworkOperations(..), Post, PostId, WebData)
 import RemoteData
 import Url exposing (Url)
 
@@ -18,13 +18,13 @@ update msg model =
     case msg of
         FetchPosts ->
             ( { model | posts = RemoteData.Loading
-                      , networkOperation = RemoteData.Loading}
+                      , networkOperation = Loading}
             , fetchPostsCommand)
 
         DataReceived response ->
             ( { model
                 | posts = response
-                , networkOperation = RemoteData.Success "OK"
+                , networkOperation = Done
               }
             , Cmd.none
             )
@@ -50,20 +50,20 @@ update msg model =
         SubmitUpdatedPost postId ->
             case findPostById postId model.posts of
                 Just post ->
-                    ( { model | networkOperation = RemoteData.Loading }
+                    ( { model | networkOperation = Loading }
                     , updatePostCommand post)
 
                 Nothing ->
                     ( model, Cmd.none )
 
         PostUpdated _ ->
-            ( { model | networkOperation = RemoteData.Success "OK" }
+            ( { model | networkOperation = Done }
             , Cmd.none )
 
         DeletePost postId ->
             case findPostById postId model.posts of
                 Just post ->
-                    ( { model | networkOperation = RemoteData.Loading }
+                    ( { model | networkOperation = Loading }
                     , deletePostCommand post)
 
                 Nothing ->
@@ -82,14 +82,14 @@ update msg model =
             updateNewPost newUrl setAuthorUrl model
 
         CreateNewPost ->
-            ( { model | networkOperation = RemoteData.Loading }
+            ( { model | networkOperation = Loading }
             , createPostCommand model.newPost)
 
         PostCreated (RemoteData.Success createdPost) ->
             ( {model
                 | posts = addNewPost createdPost model.posts
                 , newPost = emptyPost
-                , networkOperation = RemoteData.Success "OK"}
+                , networkOperation = Done}
             , Cmd.none )
 
         PostCreated _ ->
@@ -122,7 +122,7 @@ init _ url key =
       , key = key
       , route = Route.fromUrl url
       , newPost = emptyPost
-      , networkOperation = RemoteData.Success "OK"
+      , networkOperation = Done
       }
     , fetchPostsCommand
     )
