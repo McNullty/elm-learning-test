@@ -3,6 +3,7 @@ module PostApp.Types exposing (..)
 import Browser
 import Browser.Navigation exposing (Key)
 import Http exposing (Response)
+import Json.Decode exposing (Value)
 import PostApp.Routing exposing (Route)
 import RemoteData exposing (RemoteData)
 import Url exposing (Url)
@@ -58,4 +59,4 @@ type Msg
     | CreateNewPost
     | PostCreated (WebData Post)
     | SendDataToJS
-    | ReceivedDataFromJS String
+    | ReceivedDataFromJS Value

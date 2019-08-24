@@ -2,6 +2,7 @@ port module PostApp.State exposing (..)
 
 import Browser
 import Browser.Navigation as Nav
+import Json.Decode exposing (Value, decodeValue, string)
 import PostApp.Misc exposing (findPostById)
 import PostApp.Rest exposing (createPostCommand, deletePostCommand, fetchPostsCommand, updatePostCommand)
 import PostApp.Routing as Route
@@ -11,7 +12,7 @@ import Url exposing (Url)
 
 port sendData : String -> Cmd msg
 
-port receiveData : (String -> msg) -> Sub msg
+port receiveData : (Value -> msg) -> Sub msg
 
 update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =
@@ -103,7 +104,12 @@ update msg model =
             ( model, sendData "Hello JavaScript!")
 
         ReceivedDataFromJS data ->
-            ( {model | received = data }, Cmd.none )
+            case decodeValue string data of
+                Ok stringData ->
+                    ( {model | received = stringData }, Cmd.none )
+
+                Err _ ->
+                    ( model, Cmd.none )
 
 
 addNewPost : Post -> WebData (List Post) -> WebData (List Post)
