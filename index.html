@@ -22,6 +22,14 @@
         app.ports.receiveData.send("Hey Elm!");
     });
 
+    app.ports.storePosts.subscribe(function(posts) {
+        if (posts.length > 0) {
+            var postsJson = JSON.stringify(posts);
+            localStorage.setItem('post-app-save', postsJson);
+            console.log("Saved state: ", postsJson);
+        }
+    });
+
 </script>
 </body>
 </html>

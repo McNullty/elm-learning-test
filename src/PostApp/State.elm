@@ -10,9 +10,30 @@ import PostApp.Types exposing (Author, Model, Msg(..), NetworkOperations(..), Po
 import RemoteData
 import Url exposing (Url)
 
+
 port sendData : String -> Cmd msg
 
+
 port receiveData : (Value -> msg) -> Sub msg
+
+
+port storePosts : List Post -> Cmd msg
+
+
+updateWithStorage : Msg -> Model -> ( Model, Cmd Msg )
+updateWithStorage msg model =
+    let
+        ( newModel, commands ) =
+            update msg model
+
+        extractedPosts =
+            RemoteData.toMaybe newModel.posts
+                |> Maybe.withDefault []
+    in
+        ( newModel
+        , Cmd.batch [ commands, storePosts extractedPosts ]
+        )
+
 
 update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =

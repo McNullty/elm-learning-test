@@ -15,7 +15,7 @@ main =
     Browser.application
         { init = State.init
         , view = View.view
-        , update = State.update
+        , update = State.updateWithStorage
         , subscriptions = subscriptions
         , onUrlRequest = LinkClicked
         , onUrlChange = UrlChanged
