@@ -4,6 +4,7 @@ import Bootstrap.Alert as Alert
 import Bootstrap.Button as Button exposing (button, onClick)
 import Bootstrap.Spinner as Spinner
 import Bootstrap.Table as Table exposing (Row, THead)
+import Bootstrap.Utilities.Spacing as Spacingc
 import Html exposing (Html, br, div, h3, text)
 import Html.Attributes exposing (href)
 import Http
@@ -14,10 +15,10 @@ import RemoteData
 view : Model -> Html Msg
 view model =
     div []
-        [ button [ onClick FetchPosts, Button.large, Button.primary ]
-            [ text "Refresh posts" ]
-        , button [ onClick SendDataToJS, Button.large, Button.primary ]
-            [ text "Send Data to JavaScript" ]
+        [ button [ onClick FetchPosts, Button.large, Button.primary]
+                 [ text "Refresh posts" ]
+        , button [ onClick SendDataToJS, Button.large, Button.primary, Button.attrs [ Spacingc.ml1 ] ]
+                 [ text "Send Data to JavaScript" ]
         , br [] []
         , br [] []
         , Alert.link [href "/posts/new"] [text "Create new post"]

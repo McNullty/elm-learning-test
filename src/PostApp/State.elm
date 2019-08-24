@@ -11,6 +11,8 @@ import Url exposing (Url)
 
 port sendData : String -> Cmd msg
 
+port receiveData : (String -> msg) -> Sub msg
+
 update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =
     let
@@ -100,6 +102,9 @@ update msg model =
         SendDataToJS ->
             ( model, sendData "Hello JavaScript!")
 
+        ReceivedDataFromJS data ->
+            ( {model | received = data }, Cmd.none )
+
 
 addNewPost : Post -> WebData (List Post) -> WebData (List Post)
 addNewPost newPost posts =
@@ -128,6 +133,7 @@ init _ url key =
       , route = Route.fromUrl url
       , newPost = emptyPost
       , networkOperation = Done
+      , received = ""
       }
     , fetchPostsCommand
     )

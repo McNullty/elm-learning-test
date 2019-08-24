@@ -2,9 +2,13 @@ module PostApp.App exposing (..)
 
 import Browser
 import Platform exposing (Program)
-import PostApp.State as State
+import PostApp.State as State exposing (receiveData)
 import PostApp.Types exposing (..)
 import PostApp.View as View
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    receiveData ReceivedDataFromJS
 
 main : Program () Model Msg
 main =
@@ -12,7 +16,7 @@ main =
         { init = State.init
         , view = View.view
         , update = State.update
-        , subscriptions = \_ -> Sub.none
+        , subscriptions = subscriptions
         , onUrlRequest = LinkClicked
         , onUrlChange = UrlChanged
         }

@@ -26,6 +26,7 @@ type alias Model =
     , route: Route
     , newPost: Post
     , networkOperation: NetworkOperations
+    , received : String
     }
 
 
@@ -57,3 +58,4 @@ type Msg
     | CreateNewPost
     | PostCreated (WebData Post)
     | SendDataToJS
+    | ReceivedDataFromJS String
