@@ -1,4 +1,4 @@
-module PostApp.State exposing (..)
+port module PostApp.State exposing (..)
 
 import Browser
 import Browser.Navigation as Nav
@@ -8,6 +8,8 @@ import PostApp.Routing as Route
 import PostApp.Types exposing (Author, Model, Msg(..), NetworkOperations(..), Post, PostId, WebData)
 import RemoteData
 import Url exposing (Url)
+
+port sendData : String -> Cmd msg
 
 update : Msg -> Model -> ( Model, Cmd Msg)
 update msg model =
@@ -94,6 +96,9 @@ update msg model =
 
         PostCreated _ ->
             ( model, Cmd.none )
+
+        SendDataToJS ->
+            ( model, sendData "Hello JavaScript!")
 
 
 addNewPost : Post -> WebData (List Post) -> WebData (List Post)

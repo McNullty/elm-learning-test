@@ -16,6 +16,8 @@ view model =
     div []
         [ button [ onClick FetchPosts, Button.large, Button.primary ]
             [ text "Refresh posts" ]
+        , button [ onClick SendDataToJS, Button.large, Button.primary ]
+            [ text "Send Data to JavaScript" ]
         , br [] []
         , br [] []
         , Alert.link [href "/posts/new"] [text "Create new post"]

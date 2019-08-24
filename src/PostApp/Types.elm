@@ -56,3 +56,4 @@ type Msg
     | NewAuthorUrl String
     | CreateNewPost
     | PostCreated (WebData Post)
+    | SendDataToJS

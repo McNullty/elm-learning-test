@@ -16,6 +16,10 @@
 <script src="elm.js"></script>
 <script>
     const app = Elm.PostApp.App.init({node:  document.getElementById("elm-code-is-loaded-here") });
+
+    app.ports.sendData.subscribe(function(data) {
+        console.log("Data from Elm: ", data);
+    });
 </script>
 </body>
 </html>
