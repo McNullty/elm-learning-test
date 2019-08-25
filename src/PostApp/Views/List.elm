@@ -15,9 +15,9 @@ import RemoteData
 view : Model -> Html Msg
 view model =
     div []
-        [ button [ onClick FetchPosts, Button.large, Button.primary]
+        [ button [ onClick FetchPosts, Button.large, Button.primary, Button.attrs [ Spacingc.m1 ]]
                  [ text "Refresh posts" ]
-        , button [ onClick SendDataToJS, Button.large, Button.primary, Button.attrs [ Spacingc.ml1 ] ]
+        , button [ onClick SendDataToJS, Button.large, Button.primary, Button.attrs [ Spacingc.m1 ] ]
                  [ text "Send Data to JavaScript" ]
         , br [] []
         , br [] []
