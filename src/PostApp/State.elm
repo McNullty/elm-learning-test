@@ -153,17 +153,26 @@ emptyPost =
         |> Post tempPostId ""
 
 
-init : flag -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
-init _ url key =
-    ( { posts = RemoteData.Loading
-      , key = key
-      , route = Route.fromUrl url
-      , newPost = emptyPost
-      , networkOperation = Done
-      , received = ""
-      }
-    , fetchPostsCommand
-    )
+init : Maybe (List Post) -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init flags url key =
+    let
+        posts =
+            case flags of
+                Just listOfPosts ->
+                    RemoteData.Success listOfPosts
+
+                Nothing ->
+                    RemoteData.Loading
+    in
+        ( { posts = posts
+          , key = key
+          , route = Route.fromUrl url
+          , newPost = emptyPost
+          , networkOperation = Done
+          , received = ""
+          }
+        , fetchPostsCommand
+        )
 
 
 updateNewPost :

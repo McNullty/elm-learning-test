@@ -10,7 +10,7 @@ subscriptions : Model -> Sub Msg
 subscriptions _ =
     receiveData ReceivedDataFromJS
 
-main : Program () Model Msg
+main : Program (Maybe (List Post)) Model Msg
 main =
     Browser.application
         { init = State.init
