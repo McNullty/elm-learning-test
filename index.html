@@ -15,7 +15,31 @@
 
 <script src="elm.js"></script>
 <script>
-    const app = Elm.Main.init({node:  document.getElementById("elm-code-is-loaded-here") });
+
+    var storedState = localStorage.getItem('post-app-save');
+    console.log("Retrieved state: ", storedState);
+    var startingState = storedState ? JSON.parse(storedState) : null;
+
+    var element = document.getElementById("elm-code-is-loaded-here");
+
+    const app = Elm.PostApp.App.init({
+        node: element,
+        flags: startingState
+    });
+
+    app.ports.sendData.subscribe(function(data) {
+        console.log("Data from Elm: ", data);
+        app.ports.receiveData.send("Hey Elm!");
+    });
+
+    app.ports.storePosts.subscribe(function(posts) {
+        if (posts.length > 0) {
+            var postsJson = JSON.stringify(posts);
+            localStorage.setItem('post-app-save', postsJson);
+            console.log("Saved state: ", postsJson);
+        }
+    });
+
 </script>
 </body>
 </html>

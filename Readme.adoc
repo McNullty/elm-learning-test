@@ -1,0 +1,27 @@
+== Developer notes
+
+=== Installing http-server
+`sudo npm install -g http-server --unsafe-perm=true --allow-root`
+
+Running HTTP server:
+`http-server server -a localhost -p 5016 --cors`
+
+=== Installed json-server
+`sudo npm install -g json-server --unsafe-perm=true --allow-root`
+
+Running server:
+`json-server --watch server/old-school.json -p 5019`
+
+or
+
+`json-server --watch server/db.json  -p 5019`
+
+or json server with delay
+`json-server --watch server/db.json -p 5019 --delay 2000`
+
+=== Installing elm-live
+
+`sudo npm install -g elm-live --unsafe-perm=true --allow-root`
+
+Running elm-live
+`elm-live src/PostApp/App.elm --open --pushstate -- --output=elm.js`

@@ -1,0 +1,5 @@
+= TODO
+
+* Change views to be Boodstrap views
+* When saving succedes back is automatically performed
+* While saving/updating is not yet finished (Loading state) Saving message is displayed.
